@@ -1,52 +1,40 @@
-﻿using System;
+﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using TreeEditor;
-using Unity.Mathematics;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class Spawner : MonoBehaviour
 {
-    public GameObject[] prefabs;
-    public float delay = 2.0f;
-    public bool active = true;
-    public Vector2 delayRange = new Vector2(1, 2);
+	public GameObject[] prefabs;
+	public float delay = 2.0f;
+	public bool active = true;
+	public Vector2 delayRange = new Vector2(1, 2);
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        ResetDelay();
-        StartCoroutine(EnemyGenerator());
-    }
+	// Use this for initialization
+	void Start()
+	{
+		ResetDelay();
+		StartCoroutine(EnemyGenerator());
+	}
 
-    IEnumerator EnemyGenerator()
-    {
-        yield return new WaitForSeconds(delay);
+	IEnumerator EnemyGenerator()
+	{
 
-        if (active)
-        {
-            var newTransorm = transform;
-            Unity.Mathematics.Random random = new Unity.Mathematics.Random(0x6E624EB7u);
+		yield return new WaitForSeconds(delay);
 
-            GameObjectUtil.Instantiate(prefabs[Random.Range(0, prefabs.Length)], newTransorm.position);
-        }
+		if (active)
+		{
+			var newTransform = transform;
 
-        ResetDelay();
-        StartCoroutine(EnemyGenerator());
-    }
+			GameObjectUtil.Instantiate(prefabs[Random.Range(0, prefabs.Length)], newTransform.position);
+			ResetDelay();
+		}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+		StartCoroutine(EnemyGenerator());
 
-    void ResetDelay()
-    {        
-        Unity.Mathematics.Random random = new Unity.Mathematics.Random(0x6E624EB7u);
-        int iRandom = Random.Range((int)delayRange.x, (int)delayRange.y);
-        delay = iRandom;
-    }
+	}
+
+	void ResetDelay()
+	{
+		delay = Random.Range(delayRange.x, delayRange.y);
+	}
+
 }
